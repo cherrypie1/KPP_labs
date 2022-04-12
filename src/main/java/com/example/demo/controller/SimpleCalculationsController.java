@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-
 import com.example.demo.entity.ResultValue;
 import com.example.demo.service.SimpleCalculationsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,8 @@ public class SimpleCalculationsController {
     SimpleCalculationsService service;
 
     @GetMapping("/calculate")
-    public ResultValue calculateByOperation(@RequestParam(value = "operation") String operation, @RequestParam(value = "value") int value) {
+    public ResultValue calculateByOperation(@RequestParam(value = "operation") String operation,
+                                            @RequestParam(value = "value") int value) {
         return service.calculate(operation, value);
     }
 
