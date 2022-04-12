@@ -11,10 +11,11 @@ import java.util.Locale;
 public class SimpleCalculationsService {
 
     public ResultValue calculate(String operation, int value){
-        if(operation.toUpperCase(Locale.ROOT)!="PLUS_ONE" && operation.toUpperCase(Locale.ROOT)!="MINUS_ONE" &&
-                operation.toUpperCase(Locale.ROOT)!="PLUS_TEN" && operation.toUpperCase(Locale.ROOT)!="MINUS_TEN")
-            throw new NoNumberEnteredException();
-        Operations op = Operations.valueOf(operation.toUpperCase(Locale.ROOT));
-        return new ResultValue(op.action(value));
+        try {
+            Operations op = Operations.valueOf(operation.toUpperCase(Locale.ROOT));
+            return new ResultValue(op.action(value));
+        } catch (IllegalArgumentException ex){
+            throw new NoNumberEnteredException("Operation is incorrect!");
+        }
     }
 }

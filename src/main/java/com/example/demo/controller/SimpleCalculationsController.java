@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-
 import com.example.demo.entity.ResultValue;
 import com.example.demo.service.SimpleCalculationsService;
 import org.springframework.beans.factory.annotation.Autowired;

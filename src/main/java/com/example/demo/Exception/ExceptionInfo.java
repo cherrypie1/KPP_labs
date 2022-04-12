@@ -4,7 +4,6 @@ public class ExceptionInfo {
     private int code;
     private String message;
 
-
     public String getMessage() {
         return message;
     }
