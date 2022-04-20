@@ -1,6 +1,5 @@
 package com.example.demo.repository;
 
-
 import com.example.demo.entity.ResultValue;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +11,7 @@ public class NumberInMemoryCache {
 
     private final HashMap<InputParams, ResultValue> hashMap = new HashMap<>();
 
-    public boolean isContain(InputParams key) {
+    public boolean containsInputParams(InputParams key) {
         return hashMap.containsKey(key);
     }
 
@@ -22,5 +21,9 @@ public class NumberInMemoryCache {
 
     public ResultValue getParameters(@NotNull InputParams key) {
         return hashMap.get(key);
+    }
+
+    public HashMap<InputParams, ResultValue> getCache() {
+        return hashMap;
     }
 }

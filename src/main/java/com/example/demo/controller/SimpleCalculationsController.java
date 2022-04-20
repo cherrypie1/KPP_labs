@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @RestController
 public class SimpleCalculationsController {
 
@@ -20,4 +22,8 @@ public class SimpleCalculationsController {
         return service.calculate(new InputParams(operation, value));
     }
 
+    @GetMapping("/cache")
+    public HashMap<InputParams, ResultValue> getCache() {
+        return service.getNumberInMemoryCache();
+    }
 }

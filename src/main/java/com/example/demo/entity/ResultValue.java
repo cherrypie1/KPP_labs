@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-
 public class ResultValue {
 
   private int value;
