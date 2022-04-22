@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.counter.CounterService;
 import com.example.demo.entity.Operations;
 import com.example.demo.entity.ResultValue;
 import com.example.demo.exception.NoNumberEnteredException;
@@ -20,6 +21,7 @@ public class SimpleCalculationsService {
 
     public ResultValue calculate(@NotNull InputParams inputParams) {
         try {
+            new Thread(CounterService::increment).start();
             if (numberInMemoryCache.containsInputParams(inputParams)) {
                 return numberInMemoryCache.getParameters(inputParams);
             } else {
@@ -36,4 +38,6 @@ public class SimpleCalculationsService {
     public HashMap<InputParams, ResultValue> getNumberInMemoryCache() {
         return numberInMemoryCache.getCache();
     }
+
+
 }
