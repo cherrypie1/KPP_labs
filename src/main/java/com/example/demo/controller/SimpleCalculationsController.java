@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.counter.CounterService;
+import com.example.demo.entity.ResultDTO;
 import com.example.demo.entity.ResultValue;
 import com.example.demo.repository.InputParams;
 import com.example.demo.service.SimpleCalculationsService;
@@ -10,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class SimpleCalculationsController {
@@ -37,26 +36,32 @@ public class SimpleCalculationsController {
     }
 
     @PostMapping("/calculate")
-    public ResponseEntity<?> calculateBulkOperation(@Valid @RequestBody List<InputParams> bodyList) {
-        List<Integer> resultList = new LinkedList<>();
+    public ResponseEntity<Object> calculateBulkOperation(@Valid @RequestBody List<InputParams> bodyList) {
+        if (bodyList.isEmpty()) {
+            return ResponseEntity.ok(new ResultDTO());
+        }
+        List<ResultValue> resultList = new LinkedList<>();
         bodyList.forEach((currentElem) -> {
-            resultList.add(service.calculate(currentElem).getValue());
+            resultList.add(service.calculate(currentElem));
         });
+        ResultDTO dto = new ResultDTO();
+        dto.setList(resultList);
 
-        double averageResult = 0;
-        if (!resultList.isEmpty()) {
-            averageResult = resultList.stream().mapToInt(Integer::intValue).average().getAsDouble();
-        }
-        int maxResult = 0;
-        if (!resultList.isEmpty()) {
-            maxResult = resultList.stream().mapToInt(Integer::intValue).max().getAsInt();
-        }
-        int minResult = 0;
-        if (!resultList.isEmpty()) {
-            minResult = resultList.stream().mapToInt(Integer::intValue).min().getAsInt();
+        OptionalDouble averageResult = resultList.stream().map(ResultValue::getValue).mapToInt(Integer::intValue).average();
+        if (averageResult.isPresent()) {
+            dto.setAverageResult(averageResult.getAsDouble());
         }
 
-        return new ResponseEntity<>(resultList + "\nAverage: " + averageResult + "\nMax result: " +
-                maxResult + "\nMin result: " + minResult, HttpStatus.OK);
+        OptionalInt maxResult = resultList.stream().map(ResultValue::getValue).mapToInt(Integer::intValue).max();
+        if (maxResult.isPresent()) {
+            dto.setMaxResult(maxResult.getAsInt());
+        }
+
+        OptionalInt minResult = resultList.stream().map(ResultValue::getValue).mapToInt(Integer::intValue).min();
+        if (minResult.isPresent()) {
+            dto.setMinResult(minResult.getAsInt());
+        }
+
+        return ResponseEntity.ok(dto);
     }
 }
